@@ -28,29 +28,33 @@ class single():
         df = calculate_discounted_value(balance_sheet=balance_sheet, income_statement=income_statement)
         return df
 
+        # TODO this \/
     def get_estimated_growth(self, quarterly: bool = False, days: int = 5*365+100):
-        daily_adjusted = get_daily_adjusted(symbol=self.symbol, key=self.key, days=days)
         balance_sheet = self.get_balance_sheet(quarterly=quarterly)
         income_statement = self.get_income_statement(quarterly=quarterly)
+        
+        balance_sheet = self.fix_shares_outstanding(balance_sheet=balance_sheet, days=days)
+        print(balance_sheet)
+        # for i in range(len(balance_sheet)-2):
+        #     df = calculate_discounted_value(balance_sheet=balance_sheet[:3], income_statement=income_statement[:3])
 
+    # The balance_sheet does not take into accunt stock splits
+    # Which can actually be good sometimes and other times not
+    def fix_shares_outstanding(self, balance_sheet: pd.DataFrame, days: int = 5*365+100):
+        daily_adjusted = get_daily_adjusted(symbol=self.symbol, key=self.key, days=days)
         # Find If and When there was a stock split
         mask = daily_adjusted['8. split coefficient'] != '1.0'
         splits = daily_adjusted[mask]
         
         for date, row in splits.iterrows():
-            split_coefficient = float(row['8. split coefficient'])  # convert to float, if it's not already
-            
+            # Get the split coefficient from the current row in splits
+            split_coefficient = row['8. split coefficient']
             # Find the rows in 'balance_sheet' where 'fiscalDateEnding' is before 'split_date'
-            mask = balance_sheet['fiscalDateEnding'] < date
-            
+            mask = balance_sheet.index < date
             # Multiply 'commonStockSharesOutstanding' by 'split_coefficient' for these rows
             balance_sheet.loc[mask, 'commonStockSharesOutstanding'] *= split_coefficient
         
-        self.create_excel(df=balance_sheet,name='1')
-        self.create_excel(df=income_statement,name='2')
-        for i in range(len(balance_sheet)-2):
-            pass
-
+        return balance_sheet
 
 # Here we use a simple form of Discounted Cash Flow (DCF) model to get an estimated value of shares.
 def calculate_discounted_value(balance_sheet: pd.DataFrame, income_statement: pd.DataFrame):

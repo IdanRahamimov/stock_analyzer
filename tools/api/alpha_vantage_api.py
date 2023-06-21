@@ -38,7 +38,9 @@ def get_daily_adjusted(symbol: str, key: str, days: int = 5*365+100):
     df = df.transpose()
     df.index = pd.to_datetime(df.index)
     x_days = datetime.now() - timedelta(days=days)
-
+    # change datatype
+    for column in df.columns:
+        df[column] = pd.to_numeric(df[column], errors='coerce')
     # Filter data to include only the last 5 years
     df = df[df.index >= x_days]
     return df
