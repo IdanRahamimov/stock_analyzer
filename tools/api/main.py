@@ -22,8 +22,7 @@ def main():
     create_folder(dir_path=dir_path)
 
     analyst = single(symbol='AAPL',key=KEY, dir_path=dir_path)
-    analyst.create_income_statement()
-    analyst.create_income_statement(quarterly=True)
+    analyst.create_discounted_value()
 
 if __name__ == '__main__':
     main()
