@@ -12,6 +12,6 @@ def get_statement(symbol: str, function: str, key: str, quarterly: bool = False)
     return df
 
 if __name__ == '__main__':
-    df = get_statement('AAPL', 'INCOME_STATEMENT', '67QD243IAJNY3GOH')
+    df = get_statement('AAPL', 'INCOME_STATEMENT')
     print(df)
     df.to_excel('1.xlsx', index=False)
