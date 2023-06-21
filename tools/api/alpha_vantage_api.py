@@ -12,6 +12,10 @@ def get_statement(symbol: str, function: str, key: str, quarterly: bool = False)
     return df
 
 if __name__ == '__main__':
-    df = get_statement('AAPL', 'INCOME_STATEMENT')
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+
+    KEY = config['KEY']
+    df = get_statement('AAPL', 'INCOME_STATEMENT', KEY)
     print(df)
     df.to_excel('1.xlsx', index=False)
