@@ -22,7 +22,10 @@ def main():
     create_folder(dir_path=dir_path)
 
     analyst = single(symbol='AAPL',key=KEY, dir_path=dir_path)
-    analyst.create_discounted_value()
+    #analyst.create_discounted_value()
+    df = analyst.get_discounted_value()
+    print(df)
+    analyst.create_excel(df=df, name='test')
 
 if __name__ == '__main__':
     main()
