@@ -23,7 +23,7 @@ def main():
 
     analyst = single(symbol='AAPL',key=KEY, dir_path=dir_path)
     #analyst.create_discounted_value()
-    df = analyst.get_estimated_growth()
+    df = analyst.get_average_growth()
     print(df)
     #analyst.create_excel(df=df, name='test')
 

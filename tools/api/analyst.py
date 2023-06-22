@@ -9,34 +9,60 @@ class single():
         self.symbol = symbol
         self.key = key
 
+        self.statements_cache = {}
+
     def create_excel(self, df: pd.DataFrame, name: str = "no_name", quarterly: bool = False):
         df.to_excel(f'{self.dir_path}/{self.symbol}_{name}_{"quarterly" if quarterly else "annual"}.xlsx', index=True)
 
-    def get_income_statement(self, quarterly: bool = False):
-        df = get_statement(symbol=self.symbol, function='INCOME_STATEMENT', key=self.key, quarterly=quarterly)
-        return df
+    def get_statement(self, function: str, quarterly: bool = False):
+        """
+        Retrieves the specified financial statement for the symbol. 
+        Utilizes caching to prevent unnecessary API calls if the statement is unchanged.
+        """
+        cache_key = f"{function}_{'quarterly' if quarterly else 'annual'}"
 
-    def get_balance_sheet(self, quarterly: bool = False):
-        df = get_statement(symbol=self.symbol, function='BALANCE_SHEET', key=self.key, quarterly=quarterly)
-        return df
+        if cache_key not in self.statements_cache:
+            self.statements_cache[cache_key] = get_statement(symbol=self.symbol, function=function, key=self.key, quarterly=quarterly)
+
+        return self.statements_cache[cache_key]
 
     # Get estimated value of shares
     def get_discounted_value(self, quarterly: bool = False):
-        balance_sheet = self.get_balance_sheet(quarterly=quarterly)
-        income_statement = self.get_income_statement(quarterly=quarterly)
+        balance_sheet = self.get_statement(function='BALANCE_SHEET', quarterly=quarterly)
+        income_statement = self.get_statement(function='INCOME_STATEMENT', quarterly=quarterly)
         
         df = calculate_discounted_value(balance_sheet=balance_sheet, income_statement=income_statement)
         return df
 
         # TODO this \/
-    def get_estimated_growth(self, quarterly: bool = False, days: int = 5*365+100):
-        balance_sheet = self.get_balance_sheet(quarterly=quarterly)
-        income_statement = self.get_income_statement(quarterly=quarterly)
+    def get_average_growth(self, quarterly: bool = False, days: int = 5*365+100):
+        balance_sheet = self.get_statement(function='BALANCE_SHEET', quarterly=quarterly)
+        income_statement = self.get_statement(function='INCOME_STATEMENT', quarterly=quarterly)
         
         balance_sheet = self.fix_shares_outstanding(balance_sheet=balance_sheet, days=days)
-        print(balance_sheet)
-        # for i in range(len(balance_sheet)-2):
-        #     df = calculate_discounted_value(balance_sheet=balance_sheet[:3], income_statement=income_statement[:3])
+        results = []
+        prev_ratio = None
+
+        for i in range(4):
+            avrage_income = income_statement['netIncome'][i]
+            shares = balance_sheet['commonStockSharesOutstanding'][i]
+            equity = balance_sheet['totalShareholderEquity'][i]
+            ratio = (avrage_income + equity) / shares
+
+            if prev_ratio is not None:
+                results.append((ratio - prev_ratio) / prev_ratio)
+
+            prev_ratio = ratio
+
+        return sum(results) / len(results)
+
+    def get_(self, quarterly: bool = False, days: int = 5*365+100):
+        balance_sheet = self.get_statement(function='BALANCE_SHEET', quarterly=quarterly)
+
+        equity = balance_sheet['totalShareholderEquity'][0]
+        shares = balance_sheet['commonStockSharesOutstanding'][0]
+        asset_per_share = total_assets / shares
+        print(f'Asset per share for year {i + 1}: {asset_per_share}')
 
     # The balance_sheet does not take into accunt stock splits
     # Which can actually be good sometimes and other times not
@@ -56,6 +82,13 @@ class single():
         
         return balance_sheet
 
+# Calculate value_per_share by present value of an ordinary annuity
+# PVA = C * [(1 - (1 + r)^-n) / r]
+def ordinary_annuity(x: float, divider: int, discount: float, b: float = 0, time_frame: int = 1 ):
+    discounted_x = x * (1 - (1 + discount)**-time_frame)/discount
+    value = discounted_x + b
+    return value/divider
+
 # Here we use a simple form of Discounted Cash Flow (DCF) model to get an estimated value of shares.
 def calculate_discounted_value(balance_sheet: pd.DataFrame, income_statement: pd.DataFrame):
     # I want the avrage income over 3 year.
@@ -68,11 +101,7 @@ def calculate_discounted_value(balance_sheet: pd.DataFrame, income_statement: pd
     for discount in np.arange(0.01, 0.31, 0.01):
         # Loop over the investments length 1 to 20 years.
         for year in range(1, 21):
-            # Calculate value_per_share by present value of an ordinary annuity
-            # PVA = C * [(1 - (1 + r)^-n) / r]
-            discounted_income = avrage_income * (1 - (1 + discount)**-year)/discount
-            value = equity + discounted_income
-            value_per_share = value/shares
+            value_per_share = ordinary_annuity(x=avrage_income,b=equity,divider=shares,time_frame=year,discount=discount)
             
             # Append new data to the data list
             data.append([year, discount, value_per_share])

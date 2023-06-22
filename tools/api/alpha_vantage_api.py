@@ -31,19 +31,25 @@ def get_statement(symbol: str, function: str, key: str, quarterly: bool = False)
 def get_daily_adjusted(symbol: str, key: str, days: int = 5*365+100):
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={symbol}&outputsize=full&apikey={key}'
     response = requests.get(url)
-    data = response.json()
-    df = pd.DataFrame(data['Time Series (Daily)'])
-    
-    # Get date for x days ago from today
-    df = df.transpose()
-    df.index = pd.to_datetime(df.index)
-    x_days = datetime.now() - timedelta(days=days)
-    # change datatype
-    for column in df.columns:
-        df[column] = pd.to_numeric(df[column], errors='coerce')
-    # Filter data to include only the last 5 years
-    df = df[df.index >= x_days]
-    return df
+
+    try:
+        data = response.json()
+        df = pd.DataFrame(data['Time Series (Daily)'])
+        
+        # Get date for x days ago from today
+        df = df.transpose()
+        df.index = pd.to_datetime(df.index)
+        x_days = datetime.now() - timedelta(days=days)
+        # change datatype
+        for column in df.columns:
+            df[column] = pd.to_numeric(df[column], errors='coerce')
+        # Filter data to include only the last 5 years
+        df = df[df.index >= x_days]
+        
+        return df
+    except Exception as e:
+        print(data)
+        print(e)
 
 
 if __name__ == '__main__':
