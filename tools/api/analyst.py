@@ -56,13 +56,13 @@ class single():
 
         return sum(results) / len(results)
 
-    def get_(self, quarterly: bool = False, days: int = 5*365+100):
+    def get_equity_per_share(self, quarterly: bool = False, days: int = 5*365+100):
         balance_sheet = self.get_statement(function='BALANCE_SHEET', quarterly=quarterly)
 
         equity = balance_sheet['totalShareholderEquity'][0]
         shares = balance_sheet['commonStockSharesOutstanding'][0]
-        asset_per_share = total_assets / shares
-        print(f'Asset per share for year {i + 1}: {asset_per_share}')
+        equity_per_share = equity / shares
+        print(equity_per_share)
 
     # The balance_sheet does not take into accunt stock splits
     # Which can actually be good sometimes and other times not
@@ -81,6 +81,42 @@ class single():
             balance_sheet.loc[mask, 'commonStockSharesOutstanding'] *= split_coefficient
         
         return balance_sheet
+
+    def get_basic_analysis(self, quarterly: bool = False):
+        balance_sheet = self.get_statement(function='BALANCE_SHEET', quarterly=quarterly)
+        income_statement = self.get_statement(function='INCOME_STATEMENT', quarterly=quarterly)
+
+        avrage_income = income_statement['netIncome'][:3].mean()
+        shares = balance_sheet['commonStockSharesOutstanding'][0]
+        equity = balance_sheet['totalShareholderEquity'][0]
+
+        growth = self.get_average_growth(quarterly=quarterly)
+
+        # This is a the simple value of the stock over a single year of operation 
+        currnt_value = equity + avrage_income
+
+        data = []
+        # Loop over the investments length 1 to 20 years.
+        for year in range(1, 21):
+            # We estimate the future value of the stock after n years
+            future_value = currnt_value * (1 + growth)**year
+
+            # Loop over the discount rates 1% to 50%.
+            for discount in np.arange(0.01, 0.51, 0.01):
+                # We discount the future value back to a present value by discounting 
+                # The discount represent both risk and opportunity cost
+                # because those 2 value can are different to each person we calculate it over a vast range
+                present_value = future_value / (1 + discount)**year
+                value_per_share = present_value/shares
+
+                data.append([year, discount, value_per_share])
+
+        # Create DataFrame from the data list
+        df = pd.DataFrame(data, columns=['Years', 'discountRate', 'estimatedValuePerShare'])
+        # Set the row index name
+        df.set_index('Years', inplace=True)
+        return df
+
 
 # Calculate value_per_share by present value of an ordinary annuity
 # PVA = C * [(1 - (1 + r)^-n) / r]
