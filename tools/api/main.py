@@ -22,7 +22,7 @@ def main():
     create_folder(dir_path=dir_path)
 
     analyst = single(symbol='AAPL',key=KEY, dir_path=dir_path)
-    df = analyst.get_basic_analysis()
+    df = analyst.basic_analysis()
     print(df)
     analyst.create_excel(df=df, name='test')
 

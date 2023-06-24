@@ -1,0 +1,7 @@
+'MarketCapitalization' '2941266952000', * 
+'BookValue' '3.953', * caculate
+'DividendPerShare' '0.92', * caculate
+'ProfitMargin' '0.245', * caculate
+'DilutedEPSTTM' '5.9', 'EPS' '5.9', *(EARNINGS)
+'AnalystTargetPrice' '186.4',
+'SharesOutstanding' '15728700000', *
