@@ -26,4 +26,4 @@ One such tool is built using the Alpha Vantage API. This tool streamlines the pr
 
 Here's a sample preview of the generated Excel file:
 
-![excel img]([link-to-your-image](https://github.com/IdanRahamimov/stock_journal/blob/main/screenshots/apple_analysis.png))
+![excel img](stock_journal/blob/main/screenshots/apple_analysis.png)
