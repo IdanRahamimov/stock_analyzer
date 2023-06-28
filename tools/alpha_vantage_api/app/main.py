@@ -30,7 +30,7 @@ def main():
     config = load_config()
     # Check if KEY exsist and not empty in the config file
     if "KEY" not in config or not config["KEY"]:
-        raise ValueError("Invalid config: 'KEY' not found or empty")
+        raise ValueError("Invalid config: 'KEY' not found or empty, you can get a key for free from https://www.alphavantage.co/support/ ")
     key = config['KEY']
 
     args = parse_args()
