@@ -23,9 +23,7 @@ The Alpha Vantage API allow us to simplifies the process of fetching historical 
 
 Execute the `run.py` script with your desired stock symbol as an argument by running the following command:
 
-    ```
     python ./tools/alpha_vantage_api/run.py -s [stock symbol]
-    ```
 
 Replace [stock symbol] with the specific symbol of the stock you're interested in. For example, for Apple Inc., the stock symbol is AAPL.
 
