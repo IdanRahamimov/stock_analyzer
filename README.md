@@ -17,7 +17,8 @@ The Alpha Vantage API allow us to simplifies the process of fetching historical 
     pip install -r ./tools/alpha_vantage_api/requirements.txt
     ```
     
-3. Obtain your unique API key from the Alpha Vantage website. Visit their support page at https://www.alphavantage.co/support/ to get your key. Once you have your key, update the config file located at ./tools/alpha_vantage_api/.
+2. Obtain your unique API key from the Alpha Vantage website. Visit their support page at https://www.alphavantage.co/support/ to get your key.
+3. Once you have your key, update the config file located at ./tools/alpha_vantage_api/.
 
 #### Executetion 
 
