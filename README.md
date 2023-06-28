@@ -17,8 +17,7 @@ The Alpha Vantage API allow us to simplifies the process of fetching historical 
     pip install -r ./tools/alpha_vantage_api/requirements.txt
     ```
     
-2. Obtain Free API key from the Alpha Vantage website: `https://www.alphavantage.co/support/`.
-   \n Note: the free key is limited to 5 api calls a minute and 500 a day.
+2. Obtain Free API key from the Alpha Vantage website: `https://www.alphavantage.co/support/`.    Note: the free key is limited to 5 api calls a minute and 500 a day.
 
 4. Once you have your key, update the config file located at ./tools/alpha_vantage_api/.
 
