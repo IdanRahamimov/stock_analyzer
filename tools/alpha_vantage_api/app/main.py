@@ -1,4 +1,4 @@
-from analyst import single
+from app.analyst import single
 import pandas as pd
 import argparse
 import json
@@ -11,12 +11,13 @@ def parse_args():
     return parser.parse_args()
 
 # Loading the config file
-with open('config.json', 'r') as f:
-    config = json.load(f)
-
-# Get api key here https://site.financialmodelingprep.com/developer/docs
-# And put it in the config file
-KEY = config['KEY']
+def load_config() -> dict:
+    if os.path.exists('app/config.json'):
+        with open('app/config.json', 'r') as f:
+            config = json.load(f)
+        return config
+    else:
+        raise FileNotFoundError('config.json not found')
 
 def create_folder(dir_path: str):
     # Check if the directory already exists
@@ -24,12 +25,20 @@ def create_folder(dir_path: str):
         os.makedirs(dir_path)
 
 def main():
+    # Get api key here https://site.financialmodelingprep.com/developer/docs
+    # And put it in the config file
+    config = load_config()
+    # Check if KEY exsist and not empty in the config file
+    if "KEY" not in config or not config["KEY"]:
+        raise ValueError("Invalid config: 'KEY' not found or empty")
+    key = config['KEY']
+
     args = parse_args()
     # Create the directory to put the excel files in
     dir_path='../../excel'
     create_folder(dir_path=dir_path)
 
-    analyst = single(symbol=args.symbol,key=KEY, dir_path=dir_path)
+    analyst = single(symbol=args.symbol,key=key, dir_path=dir_path)
     df = analyst.basic_analysis()
     analyst.create_excel(df=df, name='analysis')
     print('done!')

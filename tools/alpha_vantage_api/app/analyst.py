@@ -1,4 +1,4 @@
-from alpha_vantage_api import get_statement, get_daily_adjusted
+from app.alpha_vantage_api import get_statement, get_daily_adjusted
 import pandas as pd
 import numpy as np
 import xlsxwriter
