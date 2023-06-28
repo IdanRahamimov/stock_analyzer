@@ -18,9 +18,9 @@ The Alpha Vantage API allow us to simplifies the process of fetching historical 
     ```
     
 2. Obtain Free API key from the Alpha Vantage website: `https://www.alphavantage.co/support/`.
-   note: the free key is limited to 5 api calls a minute and 500 a day
+   Note: the free key is limited to 5 api calls a minute and 500 a day.
 
-3. Once you have your key, update the config file located at ./tools/alpha_vantage_api/.
+4. Once you have your key, update the config file located at ./tools/alpha_vantage_api/.
 
 #### Executetion 
 
