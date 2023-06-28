@@ -12,10 +12,10 @@ One such tool is built using the Alpha Vantage API. This tool streamlines the pr
 
 1. Obtain an API key from the Alpha Vantage website. You can do this by visiting their support page at https://www.alphavantage.co/support/.
 2. Insert your obtained key into the config file located at `./tools/alpha_vantage_api/`.
-3. Execute the `main.py` script with your desired stock symbol as an argument by running the following command:
+3. Execute the `run.py` script with your desired stock symbol as an argument by running the following command:
 
     ```
-    python main.py -s [stock symbol]
+    python run.py -s [stock symbol]
     ```
 
     Replace `[stock symbol]` with your specific stock symbol. For example, for Apple Inc., the stock symbol would be `AAPL`.
