@@ -15,6 +15,7 @@ The Alpha Vantage API allow us to simplifies the process of fetching historical 
 1. Install the necessary libraries from the `requirements.txt` file with the following command:
     ```
     pip install -r ./tools/alpha_vantage_api/requirements.txt
+    ```
     
 3. Obtain your unique API key from the Alpha Vantage website. Visit their support page at https://www.alphavantage.co/support/ to get your key. Once you have your key, update the config file located at ./tools/alpha_vantage_api/.
 
