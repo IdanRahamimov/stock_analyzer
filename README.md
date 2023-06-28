@@ -38,7 +38,7 @@ Install pytest using:
     ```
     pip install pytest
     ```
-And run the test suite with
+And run the test suite with:
     ```
     python -m pytest .\tools\alpha_vantage_api\tests\
     ```
