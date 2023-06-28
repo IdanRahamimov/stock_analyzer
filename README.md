@@ -33,15 +33,11 @@ Executing this command will generate an Excel file containing historical data fo
 To test the code I used pytest.
 Install pytest using:
 
-    ```
     pip install pytest
-    ```
     
 And run the test suite with:
 
-    ```
     python -m pytest .\tools\alpha_vantage_api\tests\
-    ```
 
     
 This project is an ongoing effort. Your feedback and contributions are greatly appreciated.
