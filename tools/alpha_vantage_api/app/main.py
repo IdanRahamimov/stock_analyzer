@@ -12,8 +12,8 @@ def parse_args():
 
 # Loading the config file
 def load_config() -> dict:
-    if os.path.exists('app/config.json'):
-        with open('app/config.json', 'r') as f:
+    if os.path.exists('config.json'):
+        with open('config.json', 'r') as f:
             config = json.load(f)
         return config
     else:
