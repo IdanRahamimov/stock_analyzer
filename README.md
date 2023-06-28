@@ -1,47 +1,47 @@
 # Stock Journal
 
-This repository houses a comprehensive account of my investment history, along with a suite of custom tools that aid in making informed investment decisions.
+Welcome to Stock Journal - a unique blend of my personal investment history documentation and custom toolkits designed to assist in making well-informed investment decisions.
 
 ## Alpha Vantage API Tool
 
-One such tool is built using the Alpha Vantage API. This tool streamlines the process of gathering historical information about a stock, helping you save valuable time.
-Here's a sample preview of the generated Excel file:
+The Alpha Vantage API allow us to simplifies the process of fetching historical data for any given stock, aiding in time-efficient decision-making. Here's an illustrative representation of the Excel file the tool generates:
 
-![excel img](https://github.com/IdanRahamimov/stock_journal/blob/main/screenshots/apple_analysis.png)
+![Excel Image](https://github.com/IdanRahamimov/stock_journal/blob/main/screenshots/apple_analysis.png)
 
-## Using the Alpha Vantage API Tool
+## How to Use Alpha Vantage API Tool
 
-#### Setup
-For the setup you will need to downloand the library we use first move to the alpha_vantage_api folder.
-    ```
-    cd ./tools/alpha_vantage_api/
-    ```
-Now you can install the librarys from the requirements.txt
+### Setup
+
+1. Install the necessary libraries from the `requirements.txt` file with the following command:
+
     ```
     pip install -r ./tools/alpha_vantage_api/requirements.txt
     ```
+    
+2. Obtain your unique API key from the Alpha Vantage website. Visit their support page at https://www.alphavantage.co/support/ to get your key. Once you have your key, update the config file located at ./tools/alpha_vantage_api/.
 
-#### Execution 
-1. Obtain an API key from the Alpha Vantage website. You can do this by visiting their support page at https://www.alphavantage.co/support/.
-2. Insert your obtained key into the config file located at `./tools/alpha_vantage_api/`.
-3. Execute the `run.py` script with your desired stock symbol as an argument by running the following command:
+#### Executetion 
+
+Execute the `run.py` script with your desired stock symbol as an argument by running the following command:
 
     ```
-    /tools/alpha_vantage_api/python run.py -s [stock symbol]
+    python ./tools/alpha_vantage_api/run.py -s [stock symbol]
     ```
 
-    Replace `[stock symbol]` with your specific stock symbol. For example, for Apple Inc., the stock symbol would be `AAPL`.
+Replace [stock symbol] with the specific symbol of the stock you're interested in. For example, for Apple Inc., the stock symbol is AAPL.
 
-    This command generates an Excel file containing the historical data of your specified stock.
-
-    The Excel file can be found in the newly created `excel` directory.
+Executing this command will generate an Excel file containing historical data for the specified stock, which you can find in the excel directory created upon execution.
    
 #### Testing
-If you want to test the code then you will need to istall install pytest
+To test the code I used pytest.
+Install pytest using:
     ```
     pip install pytest
     ```
-and then from the `./tools/alpha_vantage_api/tests` run.
+And run the test suite with
     ```
-    python -m pytest .\run_all_tests.py
+    python -m pytest .\tools\alpha_vantage_api\tests\
     ```
+
+    
+This project is an ongoing effort. Your feedback and contributions are greatly appreciated.
