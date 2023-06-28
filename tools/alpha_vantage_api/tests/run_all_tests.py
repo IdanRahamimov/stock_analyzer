@@ -1,1 +1,0 @@
-from test_main import test_load_config
