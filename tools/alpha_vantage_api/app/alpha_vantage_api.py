@@ -30,15 +30,13 @@ def clean_statment(data: dict, filter_: str) -> pd.DataFrame:
             raise ValueError('missing data')
         
     df = pd.DataFrame(data[filter_])
-    # change datatype
-    for column in df.columns:
-        # If the current column is not the 'fiscalDateEnding' or 'reportedCurrency' column, convert it to float
-        if column == 'fiscalDateEnding':
-            df[column] = pd.to_datetime(df[column])
-        elif column != 'reportedCurrency':
-            df[column] = pd.to_numeric(df[column], errors='coerce')
-
+    # Set fiscalDateEnding as the index
+    df['fiscalDateEnding'] = pd.to_datetime(df['fiscalDateEnding'])
     df.set_index('fiscalDateEnding', inplace=True)
+    # Change datatype
+    for column in df.columns:
+        if column != 'reportedCurrency':
+            df[column] = pd.to_numeric(df[column], errors='coerce').astype(float)
 
     return df
 
@@ -48,24 +46,24 @@ def get_statement(symbol: str, function: str, filter_: str, key: str) -> pd.Data
     return clean_statment(data, filter_)
 
 
-def clean_daily_adjusted(data, days: int) -> pd.DataFrame:
+def clean_daily_adjusted(data: dict, time_range: datetime) -> pd.DataFrame:
     df = pd.DataFrame(data['Time Series (Daily)'])
     
     # Get date for x days ago from today
     df = df.transpose()
     df.index = pd.to_datetime(df.index)
-    x_days = datetime.now() - timedelta(days=days)
     # change datatype
     for column in df.columns:
-        df[column] = pd.to_numeric(df[column], errors='coerce')
+        df[column] = pd.to_numeric(df[column], errors='coerce').astype(float)
     # Filter data to include only the last 5 years
-    df = df[df.index >= x_days]
+    df = df[df.index >= time_range]
     return df
 
 def get_daily_adjusted(symbol: str, key: str, days: int = 5*365+100) -> pd.DataFrame:
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={symbol}&outputsize=full&apikey={key}'
     data = get_respone(url)
-    return clean_daily_adjusted(data, days)
+    time_range = datetime.now() - timedelta(days=days)
+    return clean_daily_adjusted(data, time_range)
 
 
 if __name__ == '__main__':
