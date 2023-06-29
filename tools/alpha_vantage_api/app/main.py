@@ -12,12 +12,17 @@ def parse_args():
 
 # Loading the config file
 def load_config() -> dict:
-    if os.path.exists('config.json'):
-        with open('config.json', 'r') as f:
+    script_dir = os.path.dirname(__file__)  # Get the directory of the current script.
+    parent_dir = os.path.dirname(script_dir)  # Get the parent directory of the current script.
+    config_path = os.path.join(parent_dir, 'config.json')  # Join parent directory with the config file name.
+
+    if os.path.exists(config_path):
+        with open(config_path, 'r') as f:
             config = json.load(f)
         return config
     else:
-        raise FileNotFoundError('config.json not found')
+        raise FileNotFoundError(f'{config_path} not found')
+
 
 def create_folder(dir_path: str):
     # Check if the directory already exists
