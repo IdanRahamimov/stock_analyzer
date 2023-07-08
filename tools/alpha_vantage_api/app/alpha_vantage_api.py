@@ -14,7 +14,7 @@ def get_respone(url: str) -> dict:
         will wait a minute
     '''
     data = {}
-    for i in range(10): # up to 5 min
+    for i in range(3): # up to 3 min
         response = requests.get(url)
         data = response.json()
         if 'Note' in data.keys():
@@ -22,7 +22,7 @@ def get_respone(url: str) -> dict:
         else:
             return data
             break
-    raise ValueError(f'Unable to received data from the server, {data}')
+        raise ValueError(f'Unable to received data from the server, {data}')
 
 def clean_statment(data: dict, filter_: str) -> pd.DataFrame:
     if filter_ not in data:

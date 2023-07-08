@@ -13,14 +13,19 @@ class single():
 
         self.statements_cache = {}
 
-    def create_excel(self, df: pd.DataFrame, name: str = "no_name"):
+    def create_excel(self, df: pd.DataFrame, name: str = ""):
         # Create a writer object
-
+        print(df)
         df.columns = [add_space(i) for i in df.columns]
         df.index = pd.to_datetime(df.index).date
         df = df.rename_axis('date')
 
-        writer = pd.ExcelWriter(f'{self.dir_path}/{self.symbol}_{name}.xlsx', engine='xlsxwriter')
+        if name:
+            file_path = f'{self.dir_path}/{self.symbol}_{name}.xlsx'
+        else:
+            file_path = f'{self.dir_path}/{self.symbol}.xlsx'
+        
+        writer = pd.ExcelWriter(file_path, engine='xlsxwriter')
 
         # Write your DataFrame to an excel file
         # Note that we set the index to False, so that the index (row names) will not be written to the file
