@@ -1,3 +1,4 @@
 tools/pdf_reader/
 tools/api/config.json
+.pytest_cache
 excel
